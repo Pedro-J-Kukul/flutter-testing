@@ -8,9 +8,8 @@ import '../screens/sales/sale_list_screen.dart';
 import '../screens/users/user_list_screen.dart';
 import '../screens/users/user_form_screen.dart';
 import '../models/product.dart';
-import '../models/user.dart';
-import '../services/auth_service.dart';
 import '../models/user.dart' as user_model;
+import '../services/auth_service.dart';
 
 /// App routing configuration
 class AppRoutes {
@@ -84,7 +83,7 @@ class AppRoutes {
             !authService.hasPermission(user_model.Permission.updateUser)) {
           return _unauthorizedRoute();
         }
-        final user = settings.arguments as User?;
+        final user = settings.arguments as user_model.User?;
         return MaterialPageRoute(
           builder: (_) => UserFormScreen(user: user),
         );

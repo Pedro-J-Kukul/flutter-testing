@@ -140,11 +140,28 @@ class DataRepository {
   void updateSale(Sale sale) {
     final index = _sales.indexWhere((s) => s.id == sale.id);
     if (index != -1) {
+      // Note: In a production system, product quantity adjustments should be handled here
       _sales[index] = sale;
     }
   }
 
   void deleteSale(String id) {
-    _sales.removeWhere((s) => s.id == id);
+    // Find the sale before deleting to restore product quantity
+    final sale = _sales.cast<Sale?>().firstWhere(
+      (s) => s?.id == id,
+      orElse: () => null,
+    );
+    
+    if (sale != null) {
+      _sales.removeWhere((s) => s.id == id);
+      
+      // Restore product quantity
+      final product = getProductById(sale.productId);
+      if (product != null) {
+        updateProduct(product.copyWith(
+          quantity: product.quantity + sale.quantity,
+        ));
+      }
+    }
   }
 }

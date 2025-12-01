@@ -47,6 +47,8 @@ class _SaleFormScreenState extends State<SaleFormScreen> {
       final quantity = int.parse(_quantityController.text);
       
       // Check if enough stock is available
+      // Note: In a production system, use atomic transactions or stock reservation
+      // to prevent race conditions in concurrent sales
       if (quantity > _selectedProduct!.quantity) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
